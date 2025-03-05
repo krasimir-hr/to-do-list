@@ -19,5 +19,12 @@ export class ProjectManager {
    static getProjects() {
       return this.projects;
    }
+
+   static getProjectNamesAndIcons() {
+      return this.projects.map(project => ({
+         name: project.name,
+         icon: project.icon,
+      }));
+   }
 }
 

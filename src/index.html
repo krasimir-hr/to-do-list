@@ -7,15 +7,11 @@
 
       <link
          rel="stylesheet"
-         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=account_circle,add,all_inbox,celebration,check,check_circle,delete,dock_to_right,edit,event,event_available,home,inbox,keyboard_arrow_down,school,self_care,self_improvement,sports_esports,tag,today,upcoming,work"
+         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=account_circle,add,all_inbox,celebration,check,check_circle,delete,dock_to_right,edit,event,event_available,home,inbox,keyboard_arrow_down,school,self_care,self_improvement,sentiment_neutral,spa,sports_esports,tag,today,upcoming,warning,work"
       />
    </head>
    <body>
- 
       <div class="page-container">
-         <header>
-            <h1 class="logo">The To-Do</h1>
-         </header>
          <aside>
             <div class="aside-header">
                <div class="user">
@@ -29,175 +25,56 @@
                <div class="navigation">
                   <ul>
                      <li class="nav-item">
-                        <a href="#" id="today-tasks-btn"><span class="material-symbols-outlined">today</span>Today</a>
+                        <a id="today-tasks-btn">
+                           <span class="material-symbols-outlined">today</span>
+                           <p class="menu-item">Today</p>
+                        </a>
                      </li>
                      <li class="nav-item">
-                        <a href="#" id="upcoming-tasks-btn"
-                           ><span class="material-symbols-outlined">upcoming</span>Upcoming</a
-                        >
+                        <a id="upcoming-tasks-btn">
+                           <span class="material-symbols-outlined">upcoming</span>
+                           <p class="menu-item">Upcoming</p>
+                        </a>
                      </li>
                      <li class="nav-item">
-                        <a href="#" id="completed-tasks-btn"
-                           ><span class="material-symbols-outlined">event_available</span>Completed</a
-                        >
+                        <a id="completed-tasks-btn">
+                           <span class="material-symbols-outlined">event_available</span>
+                           <p class="menu-item">Completed</p>
+                        </a>
                      </li>
                      <li class="nav-item">
-                        <a href="#" id="all-tasks-btn"
-                           ><span class="material-symbols-outlined">all_inbox</span>All my tasks</a
-                        >
+                        <a id="all-tasks-btn">
+                           <span class="material-symbols-outlined">all_inbox</span>
+                           <p class="menu-item">All my tasks</p>
+                        </a>
                      </li>
                   </ul>
                </div>
                <div class="project-list navigation">
                   <h2>Projects</h2>
-                  <button class="add-project-btn" id="add-project-btn">
+                  <button class="add-project-btn button" id="add-project-btn">
                      <span class="material-symbols-outlined">add</span>Add project
                   </button>
-                  <ul id="list-of-projects">
-                     <li class="nav-item">
-                        <a href="#"><span class="material-symbols-outlined">tag</span>Personal</a>
-                     </li>
-                     <li class="nav-item">
-                        <a href="#"><span class="material-symbols-outlined">tag</span>Personal</a>
-                     </li>
-                     <li class="nav-item">
-                        <a href="#"><span class="material-symbols-outlined">tag</span>Personal</a>
-                     </li>
-                     <li class="nav-item">
-                        <a href="#"><span class="material-symbols-outlined">tag</span>Personal</a>
-                     </li>
-                     <li class="nav-item">
-                        <a href="#"><span class="material-symbols-outlined">tag</span>Personal</a>
-                     </li>
-                  </ul>
+                  <ul id="list-of-projects"></ul>
                </div>
             </div>
          </aside>
-         <main>
-            <h1 class="project-name" id="list-title">Today</h1>
-            <div class="tasks urgent" id="tasks-container">
-               <div class="task">
-                  <span class="task--checkbox"><span class="material-symbols-outlined check-icon">check</span></span>
-                  <div class="task--content">
-                     <div class="task--header">
-                        <div class="task--title">Complete your first task.</div>
-                        <div class="task-btns">
-                           <span class="material-symbols-outlined">edit</span>
-                           <span class="material-symbols-outlined">delete</span>
-                        </div>
-                     </div>
-                     <div class="task--description">
-                        In order to mark your task as completed, please click on the checkmark.
-                     </div>
-                     <div class="task--footer">
-                        <div class="task--date"><span class="material-symbols-outlined small">event</span>15 Mar</div>
-                        <div class="task--project">
-                           <span class="material-symbols-outlined small">inbox</span>Personal
-                        </div>
-                     </div>
-                  </div>
+         <div class="header-main-container">
+            <header>
+               <h1 class="logo">The To-Do</h1>
+            </header>
+            <main>
+               <div class="project-header">
+                  <h1 class="project-name" id="list-title">Today</h1>
+                  <button id="add-task-btn" class="add-task-btn">
+                     <span class="material-symbols-outlined">add</span>Add task
+                  </button>
                </div>
-               <div class="task">
-                  <span class="task--checkbox"><span class="material-symbols-outlined check-icon">check</span></span>
-                  <div class="task--content">
-                     <div class="task--title">Complete your first task.</div>
-                     <div class="task--description">Click on the checkmark.</div>
-                     <div class="task--footer">
-                        <div class="task--date"><span class="material-symbols-outlined small">event</span>15 Mar</div>
-                        <div class="task--project">Personal</div>
-                     </div>
-                  </div>
-               </div>
-               <div class="task">
-                  <span class="task--checkbox"><span class="material-symbols-outlined check-icon">check</span></span>
-                  <div class="task--content">
-                     <div class="task--title">Complete your first task.</div>
-                     <div class="task--description">Click on the checkmark.</div>
-                     <div class="task--footer">
-                        <div class="task--date"><span class="material-symbols-outlined small">event</span>15 Mar</div>
-                        <div class="task--project">Personal</div>
-                     </div>
-                  </div>
-               </div>
-               <div class="task">
-                  <span class="task--checkbox"><span class="material-symbols-outlined check-icon">check</span></span>
-                  <div class="task--content">
-                     <div class="task--title">Complete your first task.</div>
-                     <div class="task--description">Click on the checkmark.</div>
-                     <div class="task--footer">
-                        <div class="task--date"><span class="material-symbols-outlined small">event</span>15 Mar</div>
-                        <div class="task--project">Personal</div>
-                     </div>
-                  </div>
-               </div>
-               <div class="task">
-                  <span class="task--checkbox"><span class="material-symbols-outlined check-icon">check</span></span>
-                  <div class="task--content">
-                     <div class="task--title">Complete your first task.</div>
-                     <div class="task--description">Click on the checkmark.</div>
-                     <div class="task--footer">
-                        <div class="task--date"><span class="material-symbols-outlined small">event</span>15 Mar</div>
-                        <div class="task--project">Personal</div>
-                     </div>
-                  </div>
-               </div>
-               <div class="task">
-                  <span class="task--checkbox"><span class="material-symbols-outlined check-icon">check</span></span>
-                  <div class="task--content">
-                     <div class="task--title">Complete your first task.</div>
-                     <div class="task--description">Click on the checkmark.</div>
-                     <div class="task--footer">
-                        <div class="task--date"><span class="material-symbols-outlined small">event</span>15 Mar</div>
-                        <div class="task--project">Personal</div>
-                     </div>
-                  </div>
-               </div>
-               <div class="task">
-                  <span class="task--checkbox"><span class="material-symbols-outlined check-icon">check</span></span>
-                  <div class="task--content">
-                     <div class="task--title">Complete your first task.</div>
-                     <div class="task--description">Click on the checkmark.</div>
-                     <div class="task--footer">
-                        <div class="task--date"><span class="material-symbols-outlined small">event</span>15 Mar</div>
-                        <div class="task--project">Personal</div>
-                     </div>
-                  </div>
-               </div>
-               <div class="task">
-                  <span class="task--checkbox"><span class="material-symbols-outlined check-icon">check</span></span>
-                  <div class="task--content">
-                     <div class="task--title">Complete your first task.</div>
-                     <div class="task--description">Click on the checkmark.</div>
-                     <div class="task--footer">
-                        <div class="task--date"><span class="material-symbols-outlined small">event</span>15 Mar</div>
-                        <div class="task--project">Personal</div>
-                     </div>
-                  </div>
-               </div>
-               <div class="task">
-                  <span class="task--checkbox"><span class="material-symbols-outlined check-icon">check</span></span>
-                  <div class="task--content">
-                     <div class="task--title">Complete your first task.</div>
-                     <div class="task--description">Click on the checkmark.</div>
-                     <div class="task--footer">
-                        <div class="task--date"><span class="material-symbols-outlined small">event</span>15 Mar</div>
-                        <div class="task--project">Personal</div>
-                     </div>
-                  </div>
-               </div>
-               <div class="task">
-                  <span class="task--checkbox"><span class="material-symbols-outlined check-icon">check</span></span>
-                  <div class="task--content">
-                     <div class="task--title">Complete your first task.</div>
-                     <div class="task--description">Click on the checkmark.</div>
-                     <div class="task--footer">
-                        <div class="task--date"><span class="material-symbols-outlined small">event</span>15 Mar</div>
-                        <div class="task--project">Personal</div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </main>
+               <div class="tasks urgent" id="tasks-container"></div>
+            </main>
+         </div>
+
       </div>
+      <div id="disable-overlay"></div>
    </body>
 </html>

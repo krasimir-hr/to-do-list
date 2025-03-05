@@ -13,33 +13,6 @@ import { TaskListRenderer } from './taskListRenderer';
 import { UIRenderer } from './UIRenderer';
 
 
-
-const project = ProjectManager.addProject('Personal')
-const project2 = ProjectManager.addProject('Work', 'work')
-
-const task1 = new Task(
-   'Complete your first task.',
-   'In order to mark your task as completed, please click on the checkmark.',
-   '2025-03-03',
-   'Urgent'
-);
-
-const task2 = new Task(
-   'Complete your first task.',
-   'In order to mark your task as completed, please click on the checkmark.',
-   '2025-03-06',
-   'Urgent'
-);
-
-console.log(project.name);
-
-
-TaskManager.addTask(project, task1);
-TaskManager.addTask(project, task2);
-
-console.log(TaskManager.getAllTasks());
-
-
 const todayTasksBtn = document.getElementById('today-tasks-btn');
 const upcomingTasksBtn = document.getElementById('upcoming-tasks-btn');
 const completedTasksBtn = document.getElementById('completed-tasks-btn');
@@ -50,10 +23,19 @@ upcomingTasksBtn.addEventListener('click', TaskListRenderer.renderUpcomingTasks)
 completedTasksBtn.addEventListener('click', TaskListRenderer.renderCompletedTasks);
 allTasksBtn.addEventListener('click', TaskListRenderer.renderAllTasks);
 
-const addProjectBtn = document.getElementById('add-project-btn')
+const addProjectBtn = document.getElementById('add-project-btn');
+const addTaskBtn = document.getElementById('add-task-btn');
 
-addProjectBtn.addEventListener('click', UIRenderer.renderAddProjectForm)
+
+addProjectBtn.addEventListener('click', UIRenderer.renderAddProjectForm);
+addTaskBtn.addEventListener('click', UIRenderer.renderAddTaskForm);
+
+const sidebarToggle = document.getElementById('toggle-sidebar');
+sidebarToggle.addEventListener('click', UIRenderer.toggleSidebar)
 
 document.addEventListener('DOMContentLoaded', () => {
+   TaskListRenderer.renderTasksForToday();
    ProjectRenderer.renderProjectList();
 })
+
+console.log(ProjectManager.getProjects());

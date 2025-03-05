@@ -1,5 +1,6 @@
 import { TaskManager } from "./taskManager";
 import { TaskRenderer } from "./taskRenderer";
+import { UIRenderer } from "./UIRenderer";
 
 export class TaskListRenderer {
    static renderTasks(taskList, listTitle) {
@@ -18,26 +19,31 @@ export class TaskListRenderer {
    static renderTasksForToday() {
       const todayTasks = TaskManager.getTodayTasks();
       TaskListRenderer.renderTasks(todayTasks, "Today");
+      UIRenderer.renderCurrentlyOpenedMenuItem();
    }
 
    static renderUpcomingTasks() {
       const upcomingTasks = TaskManager.getUpcomingTasks();
       TaskListRenderer.renderTasks(upcomingTasks, "Upcoming");
+      UIRenderer.renderCurrentlyOpenedMenuItem();
    }
 
    static renderCompletedTasks() {
       const completedTasks = TaskManager.getCompletedTasks();
       TaskListRenderer.renderTasks(completedTasks, "Completed");
+      UIRenderer.renderCurrentlyOpenedMenuItem();
    }
 
    static renderAllTasks() {
       const allTasks = TaskManager.getAllTasks();
-      TaskListRenderer.renderTasks(allTasks, "All your tasks");
+      TaskListRenderer.renderTasks(allTasks, "All my tasks");
+      UIRenderer.renderCurrentlyOpenedMenuItem();
    }
 
    static renderProjectTasks(project) {
       const projectTasks = TaskManager.getProjectTasks(project);
-      TaskListRenderer.renderTasks(projectTasks, project.name)
+      TaskListRenderer.renderTasks(projectTasks, project.name);
+      UIRenderer.renderCurrentlyOpenedMenuItem();
    }
 }
 

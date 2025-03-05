@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "date-fns": "^4.1.0",
+    "flatpickr": "^4.6.13",
     "geist": "^1.3.1"
   }
 }

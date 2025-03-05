@@ -39,17 +39,22 @@ button {
 }
 
 .page-container {
-   display: grid;
-   grid-template-rows: auto 1fr;
-   grid-template-columns: 400px 1fr;
-   grid-template-areas:
-      'aside header'
-      'aside main';
+   display: flex;
    height: 100vh;
 }
 
+.header-main-container {  
+   margin-left: 390px;
+   width: 100%;
+   transition: width 0.5s ease, margin 0.5s ease;
+}
+
+.header-main-container.strech-to-fullscren {
+   width: calc(100vw + 280px); /* Increase the width */
+   margin-left: 20px; /* Shift the element to the left */
+}
+
 header {
-   grid-area: header;
    background-color: #fff;
    color: #000;
    padding: 1rem;
@@ -57,21 +62,26 @@ header {
 }
 
 aside {
-   grid-area: aside;
-   background-color: #f4f4f4;
-   padding: 2rem;
-   font-size: 1.2rem;
    position: fixed;
    top: 0;
    left: 0;
+   background-color: #f4f4f4;
+   padding: 2rem;
+   font-size: 1.2rem;
    display: flex;
    flex-direction: column;
    height: 100vh;
    padding-right: 0;
+   width: 350px;
+   transition: transform 0.5s ease;
+}
+
+aside.show {
+   transform: translateX(-280px);
+   background-color: #fff;
 }
 
 main {
-   grid-area: main;
    background-color: #fff;
    padding: 2rem 5rem;
 }
@@ -89,20 +99,32 @@ main {
 .nav-item a,
 .user,
 #toggle-sidebar,
-.add-project-btn {
+.add-project-btn,
+.add-task-btn {
    display: flex;
    align-items: center;
    gap: 10px;
    padding: 1rem 0.7rem;
    border-radius: 10px;
    transition: background-color 0.3s ease;
+   cursor: pointer;
 }
 
 .nav-item a:hover,
 .user:hover,
 #toggle-sidebar:hover,
-.add-project-btn:hover {
-   background-color: #dfdddd;
+.add-project-btn:hover,
+.add-task-btn:hover {
+   background-color: #dfdddda6;
+}
+
+.nav-item a.show, .add-project-btn.show {
+   background-color: #fff;
+   pointer-events: none;
+}
+
+.nav-item a.show:hover, .add-project-btn.show {
+   background-color: #fff;
 }
 
 .navigation ul {
@@ -125,8 +147,7 @@ main {
 }
 
 .project-name {
-   margin-top: 0;
-   margin-bottom: 1rem;
+   margin: 0;
    font-size: 3rem;
 }
 
@@ -251,7 +272,8 @@ main {
    cursor: pointer;
 }
 
-.add-project-btn span {
+.add-project-btn span,
+.add-task-btn span {
    background-color: var(--purple);
    color: #fff;
    border-radius: 50%;
@@ -260,6 +282,10 @@ main {
 .sidebar-content {
    overflow: auto;
    padding-right: 10px;
+}
+
+.sidebar-content.show {
+   overflow: hidden;
 }
 
 .project-list {
@@ -271,15 +297,26 @@ main {
    top: 50%;
    left: 50%;
    background-color: #fff;
-   transform: translate(-50%, -50%);
+   transform: translate(-50%, -50%) translateY(-300px);
    width: 30vw;
    height: 30vh;
    z-index: 999;
    border: 1px solid #f0f0f0;
-   box-shadow: 0px 0px 127px 14px rgba(0,0,0,0.34);
+   box-shadow: 0px 0px 127px 14px rgba(0, 0, 0, 0.34);
    border-radius: 30px;
    padding: 2rem 1.5rem;
    min-width: 700px;
+   opacity: 0;
+   visibility: hidden;
+   pointer-events: none;
+   transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.form-container.show {
+   opacity: 1;
+   visibility: visible;
+   transform: translate(-50%, -50%) translateY(0px);
+   pointer-events: auto;
 }
 
 .form-container form {
@@ -298,6 +335,21 @@ main {
    font-size: 1.7rem;
    font-weight: 600;
    margin-bottom: 1rem;
+}
+
+.form-container .form .description-input {
+   font-weight: 400;
+   font-size: 1.1rem;
+}
+
+.form-container .form .date-input {
+   font-size: 1rem;
+   font-weight: 400;
+   display: flex;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+   display: none;
 }
 
 .form-container input:focus {
@@ -333,6 +385,11 @@ main {
    background-color: #7a31e0;
 }
 
+.submit-btn:disabled {
+   background-color: #a07fcf;
+   cursor: not-allowed;
+}
+
 .cancel-btn {
    color: #727272;
 }
@@ -347,11 +404,13 @@ main {
    flex-wrap: wrap;
 }
 
-.icon-option {
+.icon-option,
+.projects-dropdown-btn,
+.option {
    display: flex;
    align-items: center;
    border: 1px solid #e5e5e5;
-   flex-grow:0;
+   flex-grow: 0;
    color: #727272;
    padding: 3px 5px;
    gap: 10px;
@@ -359,6 +418,130 @@ main {
    transition: background-color 0.3s ease;
 }
 
-.icon-option:hover {
+.icon-option:hover,
+.projects-dropdown-btn:hover,
+.option:hover {
    background-color: #e5e5e5da;
+}
+
+.icon-option.pressed {
+   background-color: var(--purple);
+   color: #fff;
+}
+
+.add-task-btn {
+   font-size: 1.2rem;
+   font-weight: 800;
+   color: var(--purple);
+   display: flex;
+   align-items: center;
+   cursor: pointer;
+   gap: 10px;
+}
+
+.add-task-btn span {
+   font-size: 1.5rem;
+}
+
+.project-header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+
+.date-container {
+   display: flex;
+   gap: 5px;
+}
+
+.date-container label {
+   color: #5f5f5f;
+   margin-left: 2px;
+}
+
+.project-name-p {
+   margin: 0;
+}
+
+.add-project-footer {
+   display: flex;
+   justify-content: space-between;
+   margin-top: auto;
+   align-items: center;
+}
+
+.projects-dropdown-btn {
+   font-weight: bold;
+   width: 200px;
+}
+
+.projects-dropdown-list {
+   position: relative;
+   display: inline-block;
+}
+
+.options-container {
+   position: absolute;
+   top: 100%;
+   left: 0;
+   width: 100%;
+   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+   opacity: 0;
+   transform: translateY(-10px);
+   pointer-events: none;
+   transition: opacity 0.3s ease, transform 0.3s ease;
+   z-index: 1000;
+}
+
+.options-container:hover {
+   background-color: #888;
+}
+
+.options-container.show {
+   opacity: 1;
+   transform: translateY(0);
+   pointer-events: auto;
+   visibility: visible;
+}
+
+.option {
+   background-color: #fff;
+}
+
+#disable-overlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   z-index: 998;
+   visibility: hidden;
+   pointer-events: none;
+   transition: visibility 0.3s ease;
+}
+
+#disable-overlay.show {
+   visibility: visible;
+   pointer-events: auto;
+}
+
+.menu-item {
+   margin: 0;
+}
+
+.active {
+   background-color: #bea7df80;
+   border-radius: 10px;
+}
+
+.active.show {
+   background-color: #fff;
+}
+
+.nav-item .active:hover {
+   background-color: #bea7df80 !important;
+}
+
+.nav-item .active.show:hover {
+   background-color: #fff !important;
 }

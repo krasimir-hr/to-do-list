@@ -1,14 +1,24 @@
+import { TaskListRenderer } from "./taskListRenderer";
 import { TaskStorage } from "./taskStorage"
-import { ProjectStorage } from "./projectStorage";
+import { ProjectManager } from "./projectManager";
 import { isToday, parseISO } from "date-fns"
 
 export class TaskManager {
    static tasks = TaskStorage.loadTasks();
 
-   static addTask(project, task) {
-      task.projectName = project.name;
+   static addTask(projectName, task) {
       this.tasks.push(task);
       TaskStorage.saveTasks(this.tasks);
+
+      const allProjects = ProjectManager.getProjects();
+
+      allProjects.forEach(project => {
+         if (project.name == projectName) {
+            TaskListRenderer.renderProjectTasks(project);
+         }
+      });
+      
+      
    } 
 
    static removeTask(project, task) {
@@ -17,7 +27,10 @@ export class TaskManager {
 
    static getTodayTasks() {
       return this.tasks.filter(task => {
+         if (!task.dueDate) return false;
+
          const dueDate = parseISO(task.dueDate);
+
          return isToday(dueDate)
       })
    }
