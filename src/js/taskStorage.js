@@ -25,7 +25,7 @@ export class TaskStorage {
             data.description,
             data.dueDate,
             data.priority,
-            data.completed || false,
+            data.completed,
             data.projectName
          );
       });

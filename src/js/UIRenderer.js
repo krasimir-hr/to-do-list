@@ -18,15 +18,14 @@ export class UIRenderer {
       const sidebarContent = document.querySelector('.sidebar-content');
       sidebarContent.classList.toggle('show');
 
-      const menuItems = document.querySelectorAll('.nav-item a')
+      const menuItems = document.querySelectorAll('.nav-item a');
       const activeMenuItem = document.querySelector('.active');
 
-      menuItems.forEach(el => {
+      menuItems.forEach((el) => {
          if (el !== activeMenuItem) {
             el.classList.toggle('show');
          }
-         
-      })
+      });
 
       activeMenuItem.classList.toggle('show');
 
@@ -38,12 +37,12 @@ export class UIRenderer {
       const currentProject = document.querySelector('.project-name');
       const menuItems = document.querySelectorAll('.menu-item');
 
-      menuItems.forEach(el => {
+      menuItems.forEach((el) => {
          el.closest('a').classList.remove('active');
          if (currentProject.textContent === el.textContent) {
             el.closest('a').classList.add('active');
          }
-      })
+      });
    }
 
    static renderAddProjectForm() {
@@ -132,16 +131,20 @@ export class UIRenderer {
       cancelBtn.classList.add('cancel-btn');
       cancelBtn.textContent = 'Cancel';
 
-      cancelBtn.addEventListener('click', (event) => {
-         event.preventDefault();
+      cancelBtn.addEventListener(
+         'click',
+         (event) => {
+            event.preventDefault();
 
-         formContainer.classList.remove('show');
-         setTimeout(() => {
-            formContainer.remove();
-            disableOverlay.classList.remove('show');
-            currentIcon = 'tag';
-         }, 300);
-      }, { once: true });
+            formContainer.classList.remove('show');
+            setTimeout(() => {
+               formContainer.remove();
+               disableOverlay.classList.remove('show');
+               currentIcon = 'tag';
+            }, 300);
+         },
+         { once: true }
+      );
 
       const submitBtn = document.createElement('button');
       submitBtn.classList.add('submit-btn');
@@ -151,17 +154,21 @@ export class UIRenderer {
       btnsContainer.appendChild(cancelBtn);
       btnsContainer.appendChild(submitBtn);
 
-      submitBtn.addEventListener('click', (event) => {
-         event.preventDefault();
+      submitBtn.addEventListener(
+         'click',
+         (event) => {
+            event.preventDefault();
 
-         const projectName = projectNameInput.value;
-         const projectIcon = currentIcon;
+            const projectName = projectNameInput.value;
+            const projectIcon = currentIcon;
 
-         ProjectManager.addProject(projectName, projectIcon);
-         ProjectRenderer.renderProjectList();
+            ProjectManager.addProject(projectName, projectIcon);
+            ProjectRenderer.renderProjectList();
 
-         cancelBtn.click();
-      }, {once: true});
+            cancelBtn.click();
+         },
+         { once: true }
+      );
 
       let formVisible = false;
 
@@ -170,10 +177,7 @@ export class UIRenderer {
       }, 0);
 
       document.addEventListener('click', (event) => {
-         if (
-            formVisible &&
-            !formContainer.contains(event.target)
-         ) {
+         if (formVisible && !formContainer.contains(event.target)) {
             cancelBtn.click();
          }
       });
@@ -277,13 +281,12 @@ export class UIRenderer {
          currentProject === 'All your tasks'
       ) {
          if (!document.querySelector('.project-name-p')) {
-            alert('Add a task first.')
+            alert('Add a task first.');
             disableOverlay.classList.remove('show');
             return;
          } else {
             currentProject = document.querySelector('.project-name-p').textContent;
          }
-         
       }
       let currentProjectIcon = '';
       projects.forEach((project) => {
@@ -382,9 +385,16 @@ export class UIRenderer {
          });
       }
 
+      let dropdownVisible = false;
+      let dropdownClicking = false;
+
       projectsDropdownBtn.addEventListener('click', (event) => {
          event.preventDefault();
          event.stopPropagation();
+
+         dropdownClicking = true;
+         dropdownVisible = !dropdownVisible;
+
          optionsContainer.classList.toggle('show');
       });
 
@@ -401,14 +411,18 @@ export class UIRenderer {
       cancelBtn.classList.add('cancel-btn');
       cancelBtn.textContent = 'Cancel';
 
-      cancelBtn.addEventListener('click', (event) => {
-         event.preventDefault();
+      cancelBtn.addEventListener(
+         'click',
+         (event) => {
+            event.preventDefault();
 
-         formContainer.remove();
-         disableOverlay.classList.remove('show');
-         document.querySelector('.flatpickr-calendar').remove();
-         currentPriority = 'Normal';
-      }, {once: true});
+            formContainer.remove();
+            disableOverlay.classList.remove('show');
+            document.querySelector('.flatpickr-calendar').remove();
+            currentPriority = 'Normal';
+         },
+         { once: true }
+      );
 
       const submitBtn = document.createElement('button');
       submitBtn.classList.add('submit-btn');
@@ -438,23 +452,27 @@ export class UIRenderer {
          }
       }
 
-      submitBtn.addEventListener('click', (event) => {
-         event.preventDefault();
-         const taskName = taskNameInput.value;
-         const taskDescription = taskDescriptionInput.value;
-         const taskDueDate = taskDateInput.value;
-         const taskPriority = currentPriority;
-         const taskCompleted = false;
-         const taskProject = currentlySelectedProject;
+      submitBtn.addEventListener(
+         'click',
+         (event) => {
+            event.preventDefault();
+            const taskName = taskNameInput.value;
+            const taskDescription = taskDescriptionInput.value;
+            const taskDueDate = taskDateInput.value;
+            const taskPriority = currentPriority;
+            const taskCompleted = false;
+            const taskProject = currentlySelectedProject;
 
-         const newTask = new Task(taskName, taskDescription, taskDueDate, taskPriority, taskCompleted, taskProject);
+            const newTask = new Task(taskName, taskDescription, taskDueDate, taskPriority, taskCompleted, taskProject);
 
-         console.log(newTask);
+            console.log(newTask);
 
-         TaskManager.addTask(taskProject, newTask);
+            TaskManager.addTask(taskProject, newTask);
 
-         cancelBtn.click();
-      }, { once: true });
+            cancelBtn.click();
+         },
+         { once: true }
+      );
 
       addTaskForm.appendChild(taskNameInput);
       addTaskForm.appendChild(taskDescriptionInput);
@@ -475,13 +493,19 @@ export class UIRenderer {
          formVisible = true;
       }, 0);
 
+
+
       document.addEventListener('click', (event) => {
-         if (
-            formVisible &&
-            !formContainer.contains(event.target)
-         ) {
-            cancelBtn.click();
+         if (formVisible && !dropdownClicking) {
+            if (
+               !formContainer.contains(event.target) &&
+               !projectsDropdownContainer.contains(event.target) &&
+               !optionsContainer.contains(event.target)
+            ) {
+               cancelBtn.click();
+            }
          }
+         dropdownClicking = false;
       });
 
       setTimeout(() => {

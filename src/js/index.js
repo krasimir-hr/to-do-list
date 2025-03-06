@@ -36,6 +36,7 @@ sidebarToggle.addEventListener('click', UIRenderer.toggleSidebar)
 document.addEventListener('DOMContentLoaded', () => {
    TaskListRenderer.renderTasksForToday();
    ProjectRenderer.renderProjectList();
+   ProjectManager.createDefaultProject();
 })
 
 console.log(ProjectManager.getProjects());

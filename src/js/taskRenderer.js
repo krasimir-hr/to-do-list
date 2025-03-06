@@ -1,4 +1,7 @@
 import { TaskManager } from './taskManager';
+import { TaskStorage } from './taskStorage';
+
+import { TaskListRenderer } from './taskListRenderer';
 
 export class TaskRenderer {
    static renderTaskElement(task) {
@@ -11,6 +14,25 @@ export class TaskRenderer {
       const checkIcon = document.createElement('span');
       checkIcon.classList.add('material-symbols-outlined', 'check-icon');
       checkIcon.textContent = 'check';
+
+      if (task.completed) {
+         checkBox.classList.add('completed')
+         checkIcon.classList.add('completed')
+      }
+
+      checkBox.addEventListener('click', () => {
+         task.completed = !task.completed;
+
+         checkBox.classList.toggle('completed')
+         checkIcon.classList.toggle('completed');
+
+         const tasks = TaskStorage.loadTasks();
+         const updatedTasks = tasks.map(t =>
+            t.name === task.name ? { ...t, completed: task.completed } : t
+         )
+
+         TaskStorage.saveTasks(updatedTasks);
+      })
 
       checkBox.appendChild(checkIcon);
       taskDiv.appendChild(checkBox);
@@ -66,13 +88,15 @@ export class TaskRenderer {
       const taskDateDiv = document.createElement('div');
       taskDateDiv.classList.add('task--date');
 
-      const dateIcon = document.createElement('span');
-      dateIcon.classList.add('material-symbols-outlined', 'small');
-      dateIcon.textContent = 'event';
+      const dueDate = new Date(task.dueDate);
+      const formattedDate = dueDate.toLocaleDateString('en-GB', {
+         day: '2-digit',
+         month: 'short',
+         year: 'numeric',
+      })
 
-      const dateText = document.createTextNode(task.dueDate);
+      const dateText = document.createTextNode(formattedDate);
 
-      taskDateDiv.appendChild(dateIcon);
       taskDateDiv.appendChild(dateText);
 
       taskFooterDiv.appendChild(taskDateDiv);
@@ -81,13 +105,8 @@ export class TaskRenderer {
       const taskProject = document.createElement('div');
       taskProject.classList.add('task--project');
 
-      const projectIcon = document.createElement('span');
-      projectIcon.classList.add('material-symbols-outlined', 'small');
-      projectIcon.textContent = 'inbox';
-
       const projectText = document.createTextNode(task.projectName);
-
-      taskProject.appendChild(projectIcon);
+      
       taskProject.appendChild(projectText);
 
       taskFooterDiv.appendChild(taskProject);

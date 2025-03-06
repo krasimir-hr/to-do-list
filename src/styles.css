@@ -177,11 +177,27 @@ main {
    margin-right: 15px;
 }
 
+.task--checkbox.completed {
+   background-color: var(--purple);
+   border: 1px solid var(--purple);
+   color: #fff;
+}
+
+.task--checkbox.completed:hover {
+   background-color: #000;
+}
+
 .check-icon {
    opacity: 0;
    visibility: hidden;
    font-size: 1.2rem;
    transition: opacity 0.3s, visibility 0.3s;
+   user-select: none;
+}
+
+.check-icon.completed {
+   opacity: 1;
+   visibility: visible;
 }
 
 .task--checkbox:hover .check-icon {
@@ -253,7 +269,7 @@ main {
    display: flex;
    align-items: center;
    justify-content: space-between;
-   margin-bottom: 2rem;
+   margin-bottom: 0.5rem;
    padding-right: 2rem;
 }
 
@@ -299,7 +315,7 @@ main {
    background-color: #fff;
    transform: translate(-50%, -50%) translateY(-300px);
    width: 30vw;
-   height: 30vh;
+   height: 280px;
    z-index: 999;
    border: 1px solid #f0f0f0;
    box-shadow: 0px 0px 127px 14px rgba(0, 0, 0, 0.34);

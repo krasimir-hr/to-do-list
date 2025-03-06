@@ -4,11 +4,10 @@ import { ProjectManager } from "./projectManager";
 import { isToday, parseISO } from "date-fns"
 
 export class TaskManager {
-   static tasks = TaskStorage.loadTasks();
-
    static addTask(projectName, task) {
-      this.tasks.push(task);
-      TaskStorage.saveTasks(this.tasks);
+      let tasks = TaskStorage.loadTasks();
+      tasks.push(task);
+      TaskStorage.saveTasks(tasks);
 
       const allProjects = ProjectManager.getProjects();
 
@@ -17,8 +16,6 @@ export class TaskManager {
             TaskListRenderer.renderProjectTasks(project);
          }
       });
-      
-      
    } 
 
    static removeTask(project, task) {
@@ -26,7 +23,9 @@ export class TaskManager {
    }
 
    static getTodayTasks() {
-      return this.tasks.filter(task => {
+      const tasks = TaskStorage.loadTasks();
+
+      return tasks.filter(task => {
          if (!task.dueDate) return false;
 
          const dueDate = parseISO(task.dueDate);
@@ -36,21 +35,23 @@ export class TaskManager {
    }
 
    static getUpcomingTasks() {
+      const tasks = TaskStorage.loadTasks();
       const todayMidnight = new Date();
       todayMidnight.setHours(0, 0, 0, 0);
 
-      return this.tasks.filter(task => {
+      return tasks.filter(task => {
          const dueDate = new Date(task.dueDate);
          return dueDate >= todayMidnight;
       })
    }
 
    static getAllTasks() {
-      return this.tasks;
+      return TaskStorage.loadTasks();
    }
 
    static getCompletedTasks() {
-      return this.tasks.filter(task => {
+      const tasks = TaskStorage.loadTasks();
+      return tasks.filter(task => {
          return task.completed === true;
       })
    }
