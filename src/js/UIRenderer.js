@@ -1,11 +1,12 @@
 import { ProjectManager } from './projectManager';
 import { ProjectRenderer } from './projectRenderer';
 import { TaskManager } from './taskManager';
-import { TaskListRenderer } from './taskListRenderer';
+import { TaskStorage } from './taskStorage';
 import { Task } from './task';
 
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import { TaskListRenderer } from './taskListRenderer';
 
 export class UIRenderer {
    static toggleSidebar() {
@@ -190,7 +191,7 @@ export class UIRenderer {
       }, 10);
    }
 
-   static renderAddTaskForm() {
+   static renderAddTaskForm(selectedProject = null) {
       const disableOverlay = document.getElementById('disable-overlay');
       disableOverlay.classList.add('show');
 
@@ -207,7 +208,7 @@ export class UIRenderer {
       taskNameInput.required = true;
       taskNameInput.minLength = 5;
 
-      const taskDescriptionInput = document.createElement('input');
+      const taskDescriptionInput = document.createElement('textarea');
       taskDescriptionInput.classList.add('description-input');
       taskDescriptionInput.placeholder = 'Description';
       taskNameInput.required = true;
@@ -233,7 +234,7 @@ export class UIRenderer {
       const priorityContainer = document.createElement('div');
       priorityContainer.classList.add('project-icons');
 
-      let currentPriority = 'sentiment_neutral';
+      let currentPriority = 'Normal';
 
       const priorityOptions = [
          { icon: 'sentiment_neutral', label: 'Normal' },
@@ -267,7 +268,6 @@ export class UIRenderer {
             });
 
             priorityOption.classList.add('pressed');
-            console.log(currentPriority);
          });
          priorityContainer.appendChild(priorityOption);
       });
@@ -278,7 +278,7 @@ export class UIRenderer {
          currentProject === 'Today' ||
          currentProject === 'Upcoming' ||
          currentProject === 'Completed' ||
-         currentProject === 'All your tasks'
+         currentProject === 'All my tasks'
       ) {
          if (!document.querySelector('.project-name-p')) {
             alert('Add a task first.');
@@ -288,6 +288,11 @@ export class UIRenderer {
             currentProject = document.querySelector('.project-name-p').textContent;
          }
       }
+
+      if (selectedProject && typeof selectedProject === "string" && selectedProject.trim() !== "") {
+         currentProject = selectedProject;
+      }
+      
       let currentProjectIcon = '';
       projects.forEach((project) => {
          if (project.name === currentProject) {
@@ -376,7 +381,6 @@ export class UIRenderer {
                currentIconSpan.textContent = project.icon;
 
                optionsContainer.classList.toggle('show');
-               console.log(currentlySelectedProject);
 
                regenerateDropdown();
             });
@@ -452,11 +456,15 @@ export class UIRenderer {
          }
       }
 
-      submitBtn.addEventListener(
-         'click',
-         (event) => {
+      submitBtn.addEventListener('click', (event) => {
             event.preventDefault();
-            const taskName = taskNameInput.value;
+            addTask();
+         },
+         { once: true }
+      );
+
+      function addTask() {
+         const taskName = taskNameInput.value;
             const taskDescription = taskDescriptionInput.value;
             const taskDueDate = taskDateInput.value;
             const taskPriority = currentPriority;
@@ -465,14 +473,10 @@ export class UIRenderer {
 
             const newTask = new Task(taskName, taskDescription, taskDueDate, taskPriority, taskCompleted, taskProject);
 
-            console.log(newTask);
-
             TaskManager.addTask(taskProject, newTask);
 
             cancelBtn.click();
-         },
-         { once: true }
-      );
+      }
 
       addTaskForm.appendChild(taskNameInput);
       addTaskForm.appendChild(taskDescriptionInput);
@@ -511,5 +515,144 @@ export class UIRenderer {
       setTimeout(() => {
          formContainer.classList.add('show');
       }, 10);
+   }
+
+   static renderEditTaskForm(id, name, description, dueDate, priority, completed, projectName) {
+      this.renderAddTaskForm(projectName);
+
+      const formContainer = document.querySelector('.form-container');
+      const editForm = formContainer.querySelector('form');
+
+      const titleInput = editForm.querySelector('input');
+      titleInput.value = name; 
+
+      const descriptionInput = editForm.querySelector('.description-input');
+      descriptionInput.value = description;
+
+      const taskDateInput = editForm.querySelector('.date-input');
+
+      const date = new Date(dueDate);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0'); 
+
+      const formattedDate = `${day}-${month}-${year}`; 
+      taskDateInput.value = formattedDate;
+
+      flatpickr(taskDateInput, {
+         dateFormat: 'd-m-Y',
+         defaultDate: formattedDate,
+      });
+
+      let currentPriority = priority;
+      
+      const priorityOptions = editForm.querySelectorAll('.icon-option')
+      document.querySelectorAll('.icon-option').forEach((el) => {
+         el.classList.remove('pressed');
+      });
+
+      priorityOptions.forEach((option) => {
+         const labelText = option.lastChild.textContent;
+
+         if (labelText.trim() === priority) {
+            option.classList.add('pressed');
+         }
+
+         option.addEventListener('click', () => {
+            currentPriority = labelText;
+            console.log(currentPriority);
+
+            document.querySelectorAll('.icon-option').forEach((el) => {
+               el.classList.remove('pressed');
+            });
+
+            option.classList.add('pressed');
+         });
+      });
+
+      console.log(currentPriority);
+      
+
+      ///////////////////////////////////////////////////////////////////////
+
+      const projects = ProjectManager.getProjectNamesAndIcons();
+      let currentProject = projectName;
+      let currentProjectIcon = '';
+
+      projects.forEach((project) => {
+         if (project.name === currentProject) {
+            currentProjectIcon = project.icon;
+         }
+      });
+      const projectsDropdownBtn = editForm.querySelector('.projects-dropdown-btn');
+
+      let currentIconSpan = projectsDropdownBtn.querySelector('span');
+      currentIconSpan.textContent = currentProjectIcon;
+
+      const btnsContainer = editForm.querySelector('.form-buttons');
+      btnsContainer.lastChild.remove();
+
+      const submitBtn = document.createElement('button');
+      submitBtn.classList.add('submit-btn');
+      submitBtn.textContent = 'Save project';
+
+      const cancelBtn = editForm.querySelector('.cancel-btn');
+
+      btnsContainer.appendChild(submitBtn);
+
+      submitBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            const taskName = titleInput.value;
+            const taskDescription = descriptionInput.value;
+            const taskDueDate = taskDateInput.value;
+            const taskPriority = currentPriority;
+            const taskCompleted = completed;
+            const taskProjectName = projectsDropdownBtn.lastChild.textContent;
+            const taskId = id;
+
+            console.log(taskPriority);
+            
+
+            const tasks = TaskStorage.loadTasks();
+
+            const updatedTasks = tasks.map(t =>             
+               t.id === taskId ? 
+               { 
+                  name: taskName, 
+                  description: taskDescription, 
+                  dueDate: taskDueDate, 
+                  priority: taskPriority, 
+                  completed: taskCompleted, 
+                  projectName: taskProjectName, 
+                  id: t.id,
+               }
+               : t
+            )
+            
+            TaskStorage.saveTasks(updatedTasks);
+
+            const currentList = document.getElementById('list-title').textContent;
+
+            switch (currentList) {
+               case 'Today':
+                  TaskListRenderer.renderTasksForToday();
+                  break;
+               case 'Upcoming':
+                  TaskListRenderer.renderUpcomingTasks();
+                  break;
+               case 'Completed':
+                  TaskListRenderer.renderCompletedTasks();
+                  break;
+               case 'All my tasks':
+                  TaskListRenderer.renderAllTasks();
+                  break;
+               default:
+                  TaskListRenderer.renderProjectTasks(currentList);
+            }
+
+            cancelBtn.click();
+         },
+         { once: true }
+      );
    }
 }

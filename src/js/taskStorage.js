@@ -1,6 +1,8 @@
 import { Task } from './task';
 
 export class TaskStorage {
+   static lastUsedId = 0;
+
    static saveTasks(tasks) {
       const tasksData = tasks.map((task) => {
          return {
@@ -10,6 +12,7 @@ export class TaskStorage {
             priority: task.priority,
             completed: task.completed,
             projectName: task.projectName,
+            id: task.id,
          };
       });
 
@@ -19,6 +22,10 @@ export class TaskStorage {
    static loadTasks() {
       const tasksData = JSON.parse(localStorage.getItem('tasks') || '[]');
 
+      if (tasksData.length > 0) {
+         TaskStorage.lastUsedId = Math.max(...tasksData.map((task) => task.id));
+      }
+
       return tasksData.map((data) => {
          return new Task(
             data.name,
@@ -26,8 +33,13 @@ export class TaskStorage {
             data.dueDate,
             data.priority,
             data.completed,
-            data.projectName
+            data.projectName,
+            data.id,
          );
       });
+   }
+
+   static getNewTaskId() {
+      return ++TaskStorage.lastUsedId;
    }
 }

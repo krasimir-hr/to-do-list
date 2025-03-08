@@ -18,8 +18,10 @@ export class TaskManager {
       });
    } 
 
-   static removeTask(project, task) {
-      project.tasks = project.tasks.filter(t => t !== task);
+   static removeTask(task) {
+      let tasks = TaskStorage.loadTasks();
+      tasks = tasks.filter(t => t.id !== task.id);
+      TaskStorage.saveTasks(tasks);
    }
 
    static getTodayTasks() {

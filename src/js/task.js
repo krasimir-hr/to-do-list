@@ -1,7 +1,15 @@
 import { formatISO, parse, isValid } from 'date-fns'
+import { TaskStorage } from './taskStorage';
 
 export class Task {
-   constructor(name, description = "", dueDate = null, priority, completed = false, projectName = null) {
+   constructor(name, description = "", dueDate = null, priority, completed = false, projectName = null, id = null) {
+      if (id === null) {
+         this.id = TaskStorage.getNewTaskId();
+      } else {
+         this.id = id;
+      }
+
+
       this.name = name;
       this.description = description;
 

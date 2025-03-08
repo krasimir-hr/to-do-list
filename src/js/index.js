@@ -11,6 +11,8 @@ import { TaskManager } from './taskManager';
 import { TaskListRenderer } from './taskListRenderer';
 
 import { UIRenderer } from './UIRenderer';
+import { UserManager } from './userManager';
+import { UserRenderer } from './userRenderer';
 
 
 const todayTasksBtn = document.getElementById('today-tasks-btn');
@@ -34,9 +36,12 @@ const sidebarToggle = document.getElementById('toggle-sidebar');
 sidebarToggle.addEventListener('click', UIRenderer.toggleSidebar)
 
 document.addEventListener('DOMContentLoaded', () => {
+   ProjectManager.createDefaultProject();
+   UserManager.createDefaultUser();
+   
+
    TaskListRenderer.renderTasksForToday();
    ProjectRenderer.renderProjectList();
-   ProjectManager.createDefaultProject();
+   UserRenderer.renderNameAndAvatar();
 })
 
-console.log(ProjectManager.getProjects());

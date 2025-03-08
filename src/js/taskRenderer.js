@@ -1,6 +1,6 @@
 import { TaskManager } from './taskManager';
 import { TaskStorage } from './taskStorage';
-
+import { UIRenderer } from './UIRenderer'
 import { TaskListRenderer } from './taskListRenderer';
 
 export class TaskRenderer {
@@ -60,12 +60,40 @@ export class TaskRenderer {
       taskEditBtn.classList.add('material-symbols-outlined', 'small');
       taskEditBtn.textContent = 'edit';
 
+      taskEditBtn.addEventListener('click', () => {
+         UIRenderer.renderEditTaskForm(task.id, task.name, task.description, task.dueDate, task.priority, task.completed, task.projectName)
+      })
+
       taskBtns.appendChild(taskEditBtn);
 
       // Task delete button
       const taskDeleteBtn = document.createElement('span');
       taskDeleteBtn.classList.add('material-symbols-outlined', 'small');
       taskDeleteBtn.textContent = 'delete';
+
+      taskDeleteBtn.addEventListener('click', () => {
+         TaskManager.removeTask(task);
+         
+         const currentList = document.getElementById('list-title').textContent;
+
+         switch (currentList) {
+            case 'Today':
+               TaskListRenderer.renderTasksForToday();
+               break;
+            case 'Upcoming':
+               TaskListRenderer.renderUpcomingTasks();
+               break;
+            case 'Completed':
+               TaskListRenderer.renderCompletedTasks();
+               break;
+            case 'All my tasks':
+               TaskListRenderer.renderAllTasks();
+               break;
+            default:
+               TaskListRenderer.renderProjectTasks(currentList);
+         }
+         
+      })
 
       taskBtns.appendChild(taskDeleteBtn);
 
