@@ -8,17 +8,10 @@ export class UserRenderer {
 
       let userAvatar;
 
-      if (userData.avatarUrl === null) {
-         const defaultIcon = document.createElement('span');
-         defaultIcon.classList.add('material-symbols-outlined', 'avatar');
-         defaultIcon.textContent = 'account_circle';
-         userAvatar = defaultIcon;
-      } else {
-         userAvatar = document.createElement('img');
-         userAvatar.src = userData.avatarUrl;
-         userAvatar.alt = 'User avatar';
-         userAvatar.classList.add('avatar-img');
-      }
+      const defaultIcon = document.createElement('span');
+      defaultIcon.classList.add('material-symbols-outlined', 'avatar');
+      defaultIcon.textContent = 'account_circle';
+      userAvatar = defaultIcon;
 
       const usernameContainer = document.createElement('div');
       usernameContainer.classList.add('username');
@@ -26,8 +19,6 @@ export class UserRenderer {
 
       userContainer.appendChild(userAvatar);
       userContainer.appendChild(usernameContainer);
-
-      userContainer.addEventListener('click', this.renderEditForm)
    }
 
    static renderEditForm() {
@@ -44,20 +35,7 @@ export class UserRenderer {
 
       const usernameInput = document.createElement('input');
       usernameInput.placeholder = 'Enter your new username.'
-
-      const avatarUrlInput = document.createElement('input');
-      avatarUrlInput.placeholder = 'Paste the url of the avatar, you want to use.';
-
       const hrElement = document.createElement('hr');
-
-      const previewAvatar = document.createElement('img');
-      previewAvatar.classList.add('preview-avatar');
-
-      previewAvatar.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvRRiMloOe4T3o__fqzZZxrQN6XTztFbN8CA&s'
-
-      avatarUrlInput.addEventListener('input', () => {
-         previewAvatar.src = avatarUrlInput.value;
-      })
 
       const btnsContainer = document.createElement('div');
       btnsContainer.classList.add('form-buttons');
@@ -105,7 +83,6 @@ export class UserRenderer {
                   event.preventDefault();
       
                   const username = usernameInput.value;
-                  const avatarUrl = avatarUrlInput.value;
       
                   UserManager.editUser(username, avatarUrl);
                   UserRenderer.renderNameAndAvatar();
@@ -118,8 +95,6 @@ export class UserRenderer {
 
       editUserForm.appendChild(usernameInput);
       editUserForm.appendChild(hrElement);
-      editUserForm.appendChild(avatarUrlInput);
-      editUserForm.appendChild(previewAvatar);
       editUserForm.appendChild(btnsContainer)
 
       formContainer.appendChild(editUserForm);

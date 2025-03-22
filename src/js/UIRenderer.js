@@ -430,7 +430,7 @@ export class UIRenderer {
 
       const submitBtn = document.createElement('button');
       submitBtn.classList.add('submit-btn');
-      submitBtn.textContent = 'Add project';
+      submitBtn.textContent = 'Add task';
       submitBtn.disabled = true;
 
       btnsContainer.appendChild(cancelBtn);

@@ -38,8 +38,6 @@ sidebarToggle.addEventListener('click', UIRenderer.toggleSidebar)
 document.addEventListener('DOMContentLoaded', () => {
    ProjectManager.createDefaultProject();
    UserManager.createDefaultUser();
-   
-
    TaskListRenderer.renderTasksForToday();
    ProjectRenderer.renderProjectList();
    UserRenderer.renderNameAndAvatar();
